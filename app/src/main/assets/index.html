@@ -76,7 +76,14 @@ async function load(){
  try{await auth();const data=await request(ROOT+':runQuery',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'scores'}],orderBy:[{field:{fieldPath:'score'},direction:'DESCENDING'}],limit:20}})});
   const docs=(Array.isArray(data)?data:[]).map(x=>x.document).filter(Boolean);
   $('lbRows').innerHTML=docs.length?docs.map((d,i)=>{const f=d.fields||{};const name=escapeHtml(f.nickname?.stringValue||'Player');const score=Number(f.score?.integerValue||0);const country=escapeHtml(f.country?.stringValue||'🌐');return `<div class="lb-row"><span class="lb-rank">#${i+1}</span><span class="lb-name">${country} ${name}</span><span class="lb-score">${score.toLocaleString()}</span></div>`}).join(''):'<p class="lb-status">No scores yet. Be the first!</p>';
-  status(joined?'Joined • Your best result is submitted after game over.':'Choose a nickname and tap Join to share your scores.');
+const lastError = localStorage.getItem('neonLbLastError');
+if (lastError) {
+  status('Score upload failed: ' + lastError);
+} else {
+  status(joined
+    ? 'Joined • Your best result is submitted after game over.'
+    : 'Choose a nickname and tap Join to share your scores.');
+}
  }catch(e){status('Could not load leaderboard: '+e.message)}finally{loading=false}
 }
 async function submit(score){

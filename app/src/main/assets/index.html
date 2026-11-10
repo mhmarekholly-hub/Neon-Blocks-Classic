@@ -88,7 +88,10 @@ async function submit(score){
   try{const d=await request(API+'/'+encodeURIComponent(uid),{headers:{Authorization:'Bearer '+token}});previous=Number(d.fields?.score?.integerValue||0)}catch(e){if(!String(e.message).includes('NOT_FOUND'))throw e}
   if(score<=previous)return;
   await request(API+'/'+encodeURIComponent(uid),{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(document)});
- }catch(e){console.warn('Leaderboard submission:',e.message)}
+ }catch(e){
+  console.warn('Leaderboard submission:',e.message);
+  status('Score upload failed: '+e.message);
+}
 }
 $('leaderboardOpen').onclick=()=>{$('leaderboardPanel').classList.add('visible');load()};
 $('leaderboardClose').onclick=()=>{$('leaderboardPanel').classList.remove('visible')};

@@ -92,7 +92,7 @@ async function submit(score){
   const document={fields:{nickname:{stringValue:name},country:{stringValue:country},score:{integerValue:String(score)}}};
   // Only replace own best. Fetching own document avoids decreasing a previous record.
   let previous=0;
-  try{const d=await request(API+'/'+encodeURIComponent(uid),{headers:{Authorization:'Bearer '+token}});previous=Number(d.fields?.score?.integerValue||0)}catch(e){if(!String(e.message).includes('NOT_FOUND'))throw e}
+try{const d=await request(API+'/'+encodeURIComponent(uid),{headers:{Authorization:'Bearer '+token}});previous=Number(d.fields?.score?.integerValue||0)}catch(e){if(!String(e.message).includes('not found') && !String(e.message).includes('NOT_FOUND'))throw e}
   if(score<=previous)return;
   await request(API+'/'+encodeURIComponent(uid),{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(document)});
  }catch(e){

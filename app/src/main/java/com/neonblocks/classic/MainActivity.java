@@ -14,6 +14,7 @@ import androidx.webkit.WebViewClientCompat;
 
 public class MainActivity extends Activity {
     private WebView game;
+    private boolean activityPaused;
 
     @Override
     public void onCreate(Bundle state) {
@@ -61,6 +62,32 @@ public class MainActivity extends Activity {
         game.loadUrl(
             "https://appassets.androidplatform.net/assets/index.html"
         );
+    }
+
+    @Override
+    protected void onPause() {
+        activityPaused = true;
+        if (game != null) {
+            game.evaluateJavascript("window.neonGameMenu && window.neonGameMenu()", ignored -> {
+                if (game != null && activityPaused) game.onPause();
+            });
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityPaused = false;
+        if (game != null) game.onResume();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!hasFocus && game != null) {
+            game.evaluateJavascript("window.neonGameMenu && window.neonGameMenu()", null);
+        }
     }
 
     @Override

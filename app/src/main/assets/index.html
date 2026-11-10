@@ -90,6 +90,10 @@ async function submit(score){
   await request(API+'/'+encodeURIComponent(uid),{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(document)});
  }catch(e){
   console.warn('Leaderboard submission:',e.message);
+  localStorage.setItem('neonLbLastError',e.message);
+  $('lbRows').innerHTML =
+    '<p style="color:#ff6666">Score upload failed: ' +
+    escapeHtml(e.message) + '</p>';
   status('Score upload failed: '+e.message);
 }
 }

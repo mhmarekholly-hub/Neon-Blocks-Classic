@@ -36,10 +36,12 @@ bn:['বয়সের বিভাগ','আপনার বয়সের ব
 const valid=['under6','6-12','13-17','adult','unknown'];let age=null,required=false,busy=false;
 try{const saved=localStorage.getItem(key);if(valid.includes(saved))age=saved}catch(e){}
 const t=i=>(labels[document.documentElement.lang]||labels.en)[i];
+// Android's native select popup may temporarily take window focus. A resulting
+// menu refresh must not replace its option nodes or reset its current selection.
+$('ageLanguage').innerHTML=$('language').innerHTML;
 function send(){busy=age==='adult'&&!!window.NeonAdsBridge;render();window.NeonAdsBridge?.postMessage('age:'+(age==='adult'?'adult':'restricted'))}
 function render(){
- $('ageLanguage').innerHTML=$('language').innerHTML;
- $('ageLanguage').value=$('language').value;
+ if($('ageLanguage').value!==$('language').value)$('ageLanguage').value=$('language').value;
  $('ageLanguageLabel').textContent='🌐 '+$('languageLabel').textContent;
  $('ageLanguage').setAttribute('aria-label',$('languageLabel').textContent);
  $('ageTitle').textContent=t(0);$('ageDescription').textContent=t(1);

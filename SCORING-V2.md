@@ -2,7 +2,7 @@
 
 ## Behavior
 
-- Title menu: New game, Continue (when a valid save exists), Leaderboard.
+- Standalone full-screen home: New game, Continue (when a valid save exists), Leaderboard, local best, language and sound settings. The game board is hidden until starting or continuing. Only pause, game over and new-game confirmation use dialogs.
 - Menu and leaderboard pause the game. A new game requires confirmation when a game is in progress; returning to the menu preserves it.
 - Visibility loss, focus loss, page exit and Android lifecycle callbacks save and pause. Returning never resumes automatically.
 - A versioned local save includes the board, active/next piece, remaining bag, score, lines, level and gravity accumulator. Moves, rotations and piece locks also checkpoint progress. Invalid saves are discarded. Game over removes the save.

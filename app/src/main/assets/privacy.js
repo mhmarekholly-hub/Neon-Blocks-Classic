@@ -47,6 +47,8 @@ function render(){
  $('privacyStatus').textContent=window.neonPrivacyError?t(10):age!=='adult'?t(9):'';
  $('ageScreen').hidden=age!==null;
  $('privacyWait').hidden=!busy;$('privacyLoading').textContent=window.neonLbText('loading');
+ const blocked=age===null||busy||!$('privacyScreen').hidden;
+ $('app').inert=blocked;$('leaderboardPanel').inert=blocked;
 }
 function choose(value){if(!valid.includes(value)||age!==null)return;age=value;try{localStorage.setItem(key,age)}catch(e){}render();send()}
 valid.forEach((v,i)=>$('age'+i).onclick=()=>choose(v));
@@ -54,7 +56,7 @@ window.neonPrivacy={labels,translate:render,canPlay:()=>age!==null&&!busy,canUse
  state:(needsOptions,error)=>{busy=false;required=needsOptions;window.neonPrivacyError=error;render()},
  restrictedMessage:()=>t(9)};
  $('privacyOpen').onclick=()=>{window.neonGameMenu?.();$('privacyScreen').hidden=false;render()};
- $('privacyClose').onclick=()=>{$('privacyScreen').hidden=true};
+ $('privacyClose').onclick=()=>{$('privacyScreen').hidden=true;render()};
  $('privacyOptions').onclick=()=>{if(required&&age==='adult')window.NeonAdsBridge?.postMessage('privacy')};
 render();send();
 })();

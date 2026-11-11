@@ -1,0 +1,75 @@
+rules_version = '2';
+
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /scores/{userId} {
+      allow get: if request.auth != null;
+
+
+      allow list: if request.auth != null
+        && request.query.limit != null
+        && request.query.limit <= 20;
+
+
+      allow create: if validScore(userId);
+
+
+      allow update: if validScore(userId)
+        && request.resource.data.score >= resource.data.score;
+
+
+      allow delete: if false;
+    }
+
+
+
+    // scores_v2/{userId}: public nickname (2-18 characters), country (2 letters
+    // or --), positive line-only score; document ID is the owner's Auth UID.
+    match /scores_v2/{userId} {
+      allow get: if isAuthenticated();
+      allow list: if isAuthenticated()
+        && request.query.limit != null
+        && request.query.limit <= 20;
+      allow create: if isOwner(userId) && isValidV2Score(request.resource.data);
+      allow update: if isOwner(userId) && isValidV2Score(request.resource.data)
+        && request.resource.data.score >= resource.data.score;
+      allow delete: if false;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidV2Score(data) {
+      return data.keys().hasAll(['nickname', 'country', 'score'])
+        && data.keys().hasOnly(['nickname', 'country', 'score'])
+        && data.nickname is string
+        && data.nickname.size() >= 2 && data.nickname.size() <= 18
+        && data.country is string && data.country.size() == 2
+        && data.country.matches('([A-Z]{2}|--)')
+        && data.score is int && data.score > 0
+        && data.score <= 9007199254740991 && data.score % 100 == 0;
+    }
+
+    function validScore(userId) {
+      return request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(
+          ['nickname', 'country', 'score'])
+        && request.resource.data.keys().hasAll(
+          ['nickname', 'country', 'score'])
+        && request.resource.data.nickname is string
+        && request.resource.data.nickname.size() >= 1
+        && request.resource.data.nickname.size() <= 20
+        && request.resource.data.country is string
+        && request.resource.data.country.size() <= 3
+        && request.resource.data.score is int
+        && request.resource.data.score >= 0;
+    }
+  }
+}

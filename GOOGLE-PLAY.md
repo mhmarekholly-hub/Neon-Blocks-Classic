@@ -1,11 +1,11 @@
 # Neon Blocks Classic — príprava na Google Play
 
-Stav k 11. 11. 2026: herná verzia je používateľom odskúšaná. Vývojársky účet čaká na overenie. Používateľ chce celoplošnú reklamu **po skončení hry**. Skúšobné APK obsahuje Google demo reklamy; produkčné reklamy sú vypnuté; cieľová skupina zahŕňa aj deti mladšie ako 13 rokov.
+Stav k 11. 11. 2026: herná verzia je používateľom odskúšaná. Majiteľ potvrdil overenie vývojárskeho účtu. Používateľ chce celoplošnú reklamu **po skončení hry**. Skúšobné APK obsahuje Google demo reklamy; produkčné reklamy sú vypnuté; cieľová skupina zahŕňa aj deti mladšie ako 13 rokov.
 
 ## Čo táto príprava obsahuje
 
 - Android 16: `compileSdk` aj `targetSdk` 36, AGP 8.10.1, Gradle 8.11.1, JDK 17.
-- Verziu 1.0.3, kód verzie 4, existujúci identifikátor `com.neonblocks.classic`.
+- Verziu 1.0.4, kód verzie 5, existujúci identifikátor `com.neonblocks.classic`.
 - Automatické zostavenie skúšobného APK a **nepodpísaného AAB na technickú kontrolu**. Tento AAB nie je pripravený na odoslanie do Google Play.
 - Samostatné manuálne zostavenie podpisovaného AAB po doplnení upload kľúča. Žiadny kľúč ani heslo sa neukladajú do zdrojového kódu.
 - Žiadne automatické publikovanie do Google Play, platba ani vytvorenie účtu.

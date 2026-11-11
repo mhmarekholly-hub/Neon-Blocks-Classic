@@ -41,7 +41,7 @@ function render(){
  $('ageTitle').textContent=t(0);$('ageDescription').textContent=t(1);
  valid.forEach((v,i)=>$('age'+i).textContent=t(i+2));
  $('privacyOpen').textContent=t(7);$('privacyTitle').textContent=t(7);$('privacyOptions').textContent=t(8);$('privacyClose').textContent=t(11);
- $('privacyContact').textContent='Marek Hollý · Slovensko · studioneonblocks@gmail.com';
+ $('privacyContact').textContent='Neon Blocks Studio · studioneonblocks@gmail.com';
  $('privacyOptions').hidden=!required||age!=='adult';
  $('leaderboardOpen').hidden=age!=='adult';$('menuLeaderboard').hidden=age!=='adult';
  $('privacyStatus').textContent=window.neonPrivacyError?t(10):age!=='adult'?t(9):'';

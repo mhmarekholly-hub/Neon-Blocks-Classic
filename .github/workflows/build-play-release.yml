@@ -1,0 +1,62 @@
+name: Build signed Google Play bundle
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: google-play
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test game behavior
+        run: node --test tests/game.test.cjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Restore upload keystore
+        env:
+          NEON_UPLOAD_KEYSTORE_BASE64: ${{ secrets.NEON_UPLOAD_KEYSTORE_BASE64 }}
+          NEON_UPLOAD_STORE_PASSWORD: ${{ secrets.NEON_UPLOAD_STORE_PASSWORD }}
+          NEON_UPLOAD_KEY_ALIAS: ${{ secrets.NEON_UPLOAD_KEY_ALIAS }}
+          NEON_UPLOAD_KEY_PASSWORD: ${{ secrets.NEON_UPLOAD_KEY_PASSWORD }}
+        run: |
+          for variable in NEON_UPLOAD_KEYSTORE_BASE64 NEON_UPLOAD_STORE_PASSWORD NEON_UPLOAD_KEY_ALIAS NEON_UPLOAD_KEY_PASSWORD; do
+            if [ -z "${!variable}" ]; then
+              echo "Missing required Google Play environment secret: $variable"
+              exit 1
+            fi
+          done
+          umask 077
+          printf '%s' "$NEON_UPLOAD_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/neon-upload.jks"
+      - name: Build and lint signed release
+        env:
+          NEON_REQUIRE_UPLOAD_SIGNING: 'true'
+          NEON_UPLOAD_STORE_FILE: ${{ runner.temp }}/neon-upload.jks
+          NEON_UPLOAD_STORE_PASSWORD: ${{ secrets.NEON_UPLOAD_STORE_PASSWORD }}
+          NEON_UPLOAD_KEY_ALIAS: ${{ secrets.NEON_UPLOAD_KEY_ALIAS }}
+          NEON_UPLOAD_KEY_PASSWORD: ${{ secrets.NEON_UPLOAD_KEY_PASSWORD }}
+        run: gradle :app:bundleRelease :app:lintRelease --no-daemon
+      - name: Verify AAB signature
+        run: |
+          bundle=app/build/outputs/bundle/release/app-release.aab
+          jarsigner -verify "$bundle" | tee "$RUNNER_TEMP/neon-signature-check.txt"
+          grep -q 'jar verified' "$RUNNER_TEMP/neon-signature-check.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Neon-Blocks-Google-Play-signed-AAB
+          path: app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+      - name: Remove temporary upload keystore
+        if: always()
+        run: rm -f "$RUNNER_TEMP/neon-upload.jks"

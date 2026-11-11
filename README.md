@@ -1,6 +1,6 @@
 # Neon Blocks Classic — Android prototype
 
-This is an Android WebView wrapper around the existing offline Neon Blocks game. No hosting or network permission is needed. English interface and touch controls included.
+This is an Android WebView game with offline play, saved games, a standalone home screen, touch controls and 30 interface languages. The optional Firebase leaderboard uses internet access.
 
 ## Build from an iPad (GitHub Actions)
 1. Create a GitHub repository (private is fine) in Safari.
@@ -9,7 +9,11 @@ This is an Android WebView wrapper around the existing offline Neon Blocks game.
 4. After the build finishes, open the workflow run > **Artifacts** > **Neon-Blocks-Android-APK**. Download and extract the APK ZIP.
 5. Transfer `app-debug.apk` to an **Android phone** and install it after granting installation permission to the file manager/browser. The iPad cannot install APK files.
 
-Alternatively build locally using Android Studio (JDK 17, Android SDK 35, Gradle 8.9): `gradle :app:assembleDebug`.
+Alternatively build locally using Android Studio (JDK 17, Android SDK 36, Gradle 8.11.1): `gradle :app:assembleDebug`.
+
+## Google Play preparation
+
+See [GOOGLE-PLAY.md](GOOGLE-PLAY.md) for account setup, release signing, planned post-game ads and tester recruitment. CI also builds an **unsigned AAB preview** and runs release lint. This preview is not a Play upload. The separate manual signed-bundle workflow requires the owner's upload-keystore secrets and never publishes to Play automatically.
 
 ## Status and limitations
 - This is a test/debug build, **not** a signed Google Play release.

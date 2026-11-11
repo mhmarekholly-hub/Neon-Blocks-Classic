@@ -38,6 +38,10 @@ try{const saved=localStorage.getItem(key);if(valid.includes(saved))age=saved}cat
 const t=i=>(labels[document.documentElement.lang]||labels.en)[i];
 function send(){busy=age==='adult'&&!!window.NeonAdsBridge;render();window.NeonAdsBridge?.postMessage('age:'+(age==='adult'?'adult':'restricted'))}
 function render(){
+ $('ageLanguage').innerHTML=$('language').innerHTML;
+ $('ageLanguage').value=$('language').value;
+ $('ageLanguageLabel').textContent='🌐 '+$('languageLabel').textContent;
+ $('ageLanguage').setAttribute('aria-label',$('languageLabel').textContent);
  $('ageTitle').textContent=t(0);$('ageDescription').textContent=t(1);
  valid.forEach((v,i)=>$('age'+i).textContent=t(i+2));
  $('privacyOpen').textContent=t(7);$('privacyTitle').textContent=t(7);$('privacyOptions').textContent=t(8);$('privacyClose').textContent=t(11);
@@ -52,6 +56,10 @@ function render(){
 }
 function choose(value){if(!valid.includes(value)||age!==null)return;age=value;try{localStorage.setItem(key,age)}catch(e){}render();send()}
 valid.forEach((v,i)=>$('age'+i).onclick=()=>choose(v));
+ $('ageLanguage').onchange=e=>{
+  const language=$('language');language.value=e.target.value;
+  language.onchange({target:language});
+ };
 window.neonPrivacy={labels,translate:render,canPlay:()=>age!==null&&!busy,canUseOnline:()=>age==='adult',nativeReady:send,
  state:(needsOptions,error)=>{busy=false;required=needsOptions;window.neonPrivacyError=error;render()},
  restrictedMessage:()=>t(9)};

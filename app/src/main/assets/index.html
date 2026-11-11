@@ -75,15 +75,22 @@ const status=s=>{$('lbStatus').textContent=s};
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 $('lbName').value=localStorage.getItem('neonLbName')||'';
 $('lbCountry').value=localStorage.getItem('neonLbCountry')||'';
-async function request(url,opts={}){const r=await fetch(url,opts);const body=await r.json().catch(()=>({}));if(!r.ok)throw Error(body.error?.message||'HTTP '+r.status);return body}
+function errorText(e){return t(e.status===403?'permission':e.network?'network':'error')}
+async function request(url,opts={}){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+ try{
+  const r=await fetch(url,{...opts,signal:controller.signal});const body=await r.json().catch(()=>({}));
+  if(!r.ok){const details=Array.isArray(body)?body.find(x=>x.error)?.error:body.error;const e=Error(details?.message||'HTTP '+r.status);e.status=r.status;throw e}return body;
+ }catch(e){if(!e.status)e.network=true;throw e}finally{clearTimeout(timer)}
+}
 async function auth(){
  if(token && Date.now()<expires-60000)return token;
- const saved=JSON.parse(localStorage.getItem('neonLbAuth')||'null');
+ let saved=null;try{saved=JSON.parse(localStorage.getItem('neonLbAuth')||'null')}catch(e){localStorage.removeItem('neonLbAuth')}
  if(saved?.refreshToken){try{
   const data=await request('https://securetoken.googleapis.com/v1/token?key='+encodeURIComponent(config.apiKey),{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:saved.refreshToken}).toString()});
   token=data.id_token;uid=data.user_id;expires=Date.now()+Number(data.expires_in)*1000;
   localStorage.setItem('neonLbAuth',JSON.stringify({refreshToken:data.refresh_token}));return token;
- }catch(e){localStorage.removeItem('neonLbAuth')}}
+ }catch(e){if(e.status!==400&&e.status!==401)throw e;localStorage.removeItem('neonLbAuth')}}
  const data=await request('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+encodeURIComponent(config.apiKey),{method:'POST',headers:{'Content-Type':'application/json'},body:'{"returnSecureToken":true}'});
  token=data.idToken;uid=data.localId;expires=Date.now()+Number(data.expiresIn)*1000;
  localStorage.setItem('neonLbAuth',JSON.stringify({refreshToken:data.refreshToken}));return token;
@@ -94,15 +101,8 @@ async function load(){
  try{await auth();const data=await request(ROOT+':runQuery',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:COLLECTION}],orderBy:[{field:{fieldPath:'score'},direction:'DESCENDING'}],limit:20}})});
   const docs=(Array.isArray(data)?data:[]).map(x=>x.document).filter(Boolean);
   $('lbRows').innerHTML=docs.length?docs.map((d,i)=>{const f=d.fields||{};const name=escapeHtml(f.nickname?.stringValue||'🎮');const score=Number(f.score?.integerValue||0);const country=escapeHtml(f.country?.stringValue||'🌐');return `<div class="lb-row"><span class="lb-rank">#${i+1}</span><span class="lb-name">${country} ${name}</span><span class="lb-score">${score.toLocaleString()}</span></div>`}).join(''):'<p class="lb-status">'+escapeHtml(t('empty'))+'</p>';
-const lastError = localStorage.getItem('neonLbLastError');
-if (lastError) {
-  status(t('error')+' ' + lastError);
-} else {
-  status(joined
-    ? t('joined')
-    : t('invitation'));
-}
- }catch(e){status(t('error')+' '+e.message)}finally{loading=false}
+status(joined?t('joined'):t('invitation'));
+ }catch(e){console.warn('Leaderboard load:',e.message);status(errorText(e))}finally{loading=false}
 }
 async function submit(score){
  if(!configured||!joined||!Number.isInteger(score)||score<=0)return;
@@ -110,16 +110,13 @@ async function submit(score){
   const document={fields:{nickname:{stringValue:name},country:{stringValue:country},score:{integerValue:String(score)}}};
   // Only replace own best. Fetching own document avoids decreasing a previous record.
   let previous=0;
-try{const d=await request(API+'/'+encodeURIComponent(uid),{headers:{Authorization:'Bearer '+token}});previous=Number(d.fields?.score?.integerValue||0)}catch(e){if(!String(e.message).includes('not found') && !String(e.message).includes('NOT_FOUND'))throw e}
+try{const d=await request(API+'/'+encodeURIComponent(uid),{headers:{Authorization:'Bearer '+token}});previous=Number(d.fields?.score?.integerValue||0)}catch(e){if(e.status!==404)throw e}
   if(score<=previous)return;
   await request(API+'/'+encodeURIComponent(uid),{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(document)});localStorage.removeItem('neonLbLastError');
  }catch(e){
   console.warn('Leaderboard submission:',e.message);
   localStorage.setItem('neonLbLastError',e.message);
-  $('lbRows').innerHTML =
-    '<p style="color:#ff6666">'+escapeHtml(t('error'))+' ' +
-    escapeHtml(e.message) + '</p>';
-  status(t('error')+' '+e.message);
+  status(errorText(e));
 }
 }
 function open(){window.neonGameMenu();$('leaderboardPanel').classList.add('visible');load()}
@@ -132,7 +129,7 @@ $('lbJoin').onclick=async()=>{
  if(country && !/^[A-Z]{2}$/.test(country)){status(t('country'));return}
  if(!configured){status(t('error'));return}
  try{await auth();localStorage.setItem('neonLbName',name);localStorage.setItem('neonLbCountry',country||'--');localStorage.setItem('neonLbJoined','yes');joined=true;status(t('joined'));await load()}
- catch(e){status(t('error')+' '+e.message)}
+ catch(e){console.warn('Leaderboard join:',e.message);status(errorText(e))}
 };
 window.neonLeaderboard={submit,open};
 })();

@@ -33,7 +33,40 @@ th: ['เมนู','อันดับโลก','ชื่อเล่น (2�
 bn: ['মেনু','বিশ্ব লিডারবোর্ড','ডাকনাম (2–18 অক্ষর)','দেশ (2 ইংরেজি অক্ষর)','যোগ দিন / নাম সংরক্ষণ','রিফ্রেশ','সেরা 20। শুধু শেষ হওয়া খেলা। ডাকনাম সর্বজনীন: আসল নাম দেবেন না। ইন্টারনেট প্রয়োজন।','লোড হচ্ছে…','এখনও কোনো স্কোর নেই।','যোগ দিয়েছেন। শেষ হওয়া খেলার সেরা স্কোর শেয়ার হবে।','ডাকনাম বেছে নিয়ে যোগ দিন।','অনুরোধ সম্পন্ন হয়নি।','খেলা সংরক্ষণ করা যায়নি।']
 };
 window.NEON_MENU=Object.fromEntries(Object.entries(window.NEON_LOCALES).map(([k,v])=>[k,v[0]]));
+window.NEON_CONNECTION_MESSAGES={
+en:['Cannot connect. Check your internet connection and tap Refresh.','Leaderboard access is blocked on the server. Please contact the game developer.'],
+sk:['Nedá sa pripojiť. Skontroluj internet a stlač Obnoviť.','Server blokuje prístup k rebríčku. Obráť sa na vývojára hry.'],
+cs:['Nelze se připojit. Zkontroluj internet a stiskni Obnovit.','Server blokuje přístup k žebříčku. Obrať se na vývojáře hry.'],
+de:['Keine Verbindung. Prüfe das Internet und tippe auf Aktualisieren.','Der Server blockiert die Rangliste. Wende dich an den Spieleentwickler.'],
+fr:['Connexion impossible. Vérifiez Internet et appuyez sur Actualiser.','Le serveur bloque le classement. Contactez le développeur du jeu.'],
+es:['No se puede conectar. Comprueba internet y pulsa Actualizar.','El servidor bloquea la clasificación. Contacta con el desarrollador.'],
+it:['Connessione non riuscita. Controlla internet e premi Aggiorna.','Il server blocca la classifica. Contatta lo sviluppatore del gioco.'],
+pt:['Não foi possível ligar. Verifica a internet e toca em Atualizar.','O servidor bloqueia a classificação. Contacta o programador do jogo.'],
+pl:['Brak połączenia. Sprawdź internet i naciśnij Odśwież.','Serwer blokuje ranking. Skontaktuj się z twórcą gry.'],
+uk:['Немає з’єднання. Перевірте інтернет і натисніть Оновити.','Сервер блокує рейтинг. Зверніться до розробника гри.'],
+'zh-CN':['无法连接。请检查网络并点击刷新。','服务器阻止访问排行榜。请联系游戏开发者。'],
+'zh-TW':['無法連線。請檢查網路並點選重新整理。','伺服器封鎖排行榜存取。請聯絡遊戲開發者。'],
+ja:['接続できません。インターネットを確認して更新してください。','サーバーがランキングへのアクセスを拒否しています。開発者にお問い合わせください。'],
+ko:['연결할 수 없습니다. 인터넷을 확인하고 새로 고침을 누르세요.','서버가 순위 접근을 차단했습니다. 게임 개발자에게 문의하세요.'],
+hi:['कनेक्ट नहीं हो सका। इंटरनेट जाँचें और ताज़ा करें दबाएँ।','सर्वर ने लीडरबोर्ड रोक दिया है। खेल के डेवलपर से संपर्क करें।'],
+ar:['تعذر الاتصال. تحقق من الإنترنت واضغط تحديث.','الخادم يمنع الوصول إلى الترتيب. تواصل مع مطور اللعبة.'],
+ru:['Нет соединения. Проверьте интернет и нажмите Обновить.','Сервер блокирует рейтинг. Обратитесь к разработчику игры.'],
+tr:['Bağlanılamıyor. İnterneti kontrol edip Yenile’ye dokun.','Sunucu sıralamaya erişimi engelliyor. Oyun geliştiricisine başvur.'],
+nl:['Geen verbinding. Controleer internet en tik op Vernieuwen.','De server blokkeert de ranglijst. Neem contact op met de ontwikkelaar.'],
+sv:['Kan inte ansluta. Kontrollera internet och tryck på Uppdatera.','Servern blockerar rankingen. Kontakta spelutvecklaren.'],
+da:['Kan ikke oprette forbindelse. Tjek internet og tryk Opdater.','Serveren blokerer ranglisten. Kontakt spiludvikleren.'],
+fi:['Yhteyttä ei saada. Tarkista internet ja paina Päivitä.','Palvelin estää tulostaulun käytön. Ota yhteyttä pelin kehittäjään.'],
+no:['Kan ikke koble til. Sjekk internett og trykk Oppdater.','Serveren blokkerer rangeringen. Kontakt spillutvikleren.'],
+ro:['Conectare imposibilă. Verifică internetul și apasă Reîmprospătează.','Serverul blochează clasamentul. Contactează dezvoltatorul jocului.'],
+hu:['Nem lehet csatlakozni. Ellenőrizd az internetet, és nyomd meg a Frissítés gombot.','A szerver blokkolja a ranglistát. Keresd a játék fejlesztőjét.'],
+el:['Αδύνατη η σύνδεση. Ελέγξτε το διαδίκτυο και πατήστε Ανανέωση.','Ο διακομιστής αποκλείει την κατάταξη. Επικοινωνήστε με τον δημιουργό.'],
+id:['Tidak dapat terhubung. Periksa internet lalu ketuk Muat ulang.','Server memblokir peringkat. Hubungi pengembang permainan.'],
+vi:['Không thể kết nối. Kiểm tra internet rồi nhấn Làm mới.','Máy chủ chặn bảng xếp hạng. Hãy liên hệ nhà phát triển trò chơi.'],
+th:['เชื่อมต่อไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วกดรีเฟรช','เซิร์ฟเวอร์บล็อกการเข้าถึงอันดับ โปรดติดต่อผู้พัฒนาเกม'],
+bn:['সংযোগ হচ্ছে না। ইন্টারনেট পরীক্ষা করে রিফ্রেশ চাপুন।','সার্ভার লিডারবোর্ডে প্রবেশ বন্ধ করেছে। গেমের ডেভেলপারের সাথে যোগাযোগ করুন।']
+};
 window.neonLbText=key=>{
+ if(key==='network'||key==='permission')return (window.NEON_CONNECTION_MESSAGES[document.documentElement.lang]||window.NEON_CONNECTION_MESSAGES.en)[key==='network'?0:1];
  const indexes={title:1,name:2,country:3,join:4,refresh:5,privacy:6,loading:7,empty:8,joined:9,invitation:10,error:11,saveError:12};
  return (window.NEON_LOCALES[document.documentElement.lang]||window.NEON_LOCALES.en)[indexes[key]];
 };

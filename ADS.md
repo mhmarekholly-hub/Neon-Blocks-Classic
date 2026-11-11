@@ -18,3 +18,4 @@ Reklama sa skúsi zobraziť iba pri skončení hry, ak je už načítaná. Nena�
 Pred ostrými reklamami zostáva overenie na zariadení, finálne zásady, aktivácia a overenie vymazania identity a skóre, zverejnenie potvrdených retenčných pravidiel, Families/Data safety a rozhodnutie o detskom rebríčku/reklamách. Aktivácia produkčnej jednotky musí byť samostatná zmena. Existujúce skóre sa bez súhlasu nevymaže.
 
 Oficiálny postup UMP: https://developers.google.com/admob/android/privacy.
+Verejné zásady pre AdMob: https://mhmarekholly-hub.github.io/Neon-Blocks-Classic/privacy/ (HTTPS, overené bez prihlásenia 11. 11. 2026).

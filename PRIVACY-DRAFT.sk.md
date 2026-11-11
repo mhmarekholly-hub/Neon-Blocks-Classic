@@ -2,14 +2,14 @@
 
 Majiteľ potvrdil meno Marek Hollý, Slovensko, kontakt studioneonblocks@gmail.com a uchovávanie výsledkov do vymazania hráčom. Značka v bežnej obrazovke hry je Neon Blocks Studio.
 
-Text pre testovaciu verziu 1.0.8 je pripravený v docs/privacy/index.html a identická kópia je zabalená v app/src/main/assets/privacy-policy.html. Pokrýva slovenčinu a angličtinu. Verejná webová adresa ešte nie je zverejnená. Opisuje pripravované používateľské vymazanie, preto sa má aktivovať až spolu s overenými pravidlami Firebase.
+Text pre testovaciu verziu 1.0.8 je pripravený v docs/privacy/index.html a identická kópia je zabalená v app/src/main/assets/privacy-policy.html. Pokrýva slovenčinu a angličtinu. Verejná webová adresa: https://mhmarekholly-hub.github.io/Neon-Blocks-Classic/privacy/ (zverejnená a overená bez prihlásenia 11. 11. 2026). Opisuje pripravované používateľské vymazanie, pravidlá Firebase už boli aktivované; verejná stránka je sprístupnená cez GitHub Pages.
 
 Pred zverejnením:
 
 1. Overiť testy vlastníctva a mazania v lokálnych emulátoroch CI.
-2. Skontrolovať a zverejniť pravidlá, ktoré dovoľujú vymazať len vlastné skóre v scores a scores_v2. Publikovanie pravidiel samo záznamy nemaže.
+2. HOTOVO 11. 11. 2026: pravidlá vlastného vymazania v scores a scores_v2 boli publikované. Živý zdroj sa zhoduje s otestovanými pravidlami po odhliadnutí od komentárov a medzier. Pôvodná verzia je zálohovaná v outputs/Firebase-rules-before-owner-delete.rules. Publikovanie pravidiel samo záznamy nemaže.
 3. Overiť potvrdenie, úspech a chybu vymazania na vlastnom testovacom profile so súhlasom jeho vlastníka. Nemažeme cudzie ani reálne výsledky na skúšku.
-4. Zverejniť HTML na stabilnej verejnej URL bez prihlásenia. Nepoužívať odkaz na editor repozitára ani PDF. Doplniť URL do Google Play a AdMob.
+4. HOTOVO: HTML je verejne dostupné cez HTTPS bez prihlásenia. Doplniť URL do Google Play a AdMob. Zdroj Pages: feature/google-play-preparation, priečinok /docs; pred zmazaním tejto vetvy po zlúčení prepnúť Pages na main /docs.
 5. V AdMob Privacy & messaging vytvoriť správu pre príslušné regióny, priradiť správne App ID, vyplniť URL a overiť voľby v zariadení. Na tomto pracovnom počítači je apps.admob.com blokované sieťou; konfiguráciu musí dokončiť majiteľ v dostupnom prostredí.
 6. Pred produkčnými reklamami aktualizovať text podľa skutočnej prevádzky a vyplniť Families a Data safety. Produkčná reklamná jednotka zostáva nepoužitá.
 

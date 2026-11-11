@@ -20,8 +20,8 @@ android {
         applicationId 'com.neonblocks.classic'
         minSdk 24
         targetSdk 36
-        versionCode 3
-        versionName '1.0.2'
+        versionCode 4
+        versionName '1.0.3'
     }
 
     buildFeatures { buildConfig true }
@@ -37,7 +37,7 @@ android {
     }
 
     buildTypes {
-        debug { manifestPlaceholders = [admobAppId: 'ca-app-pub-3940256099942544~3347511713'] }
+        debug { manifestPlaceholders = [admobAppId: 'ca-app-pub-5170449946501129~5808935188'] }
         release {
             manifestPlaceholders = [admobAppId: 'ca-app-pub-5170449946501129~5808935188']
             minifyEnabled false
@@ -53,4 +53,5 @@ android {
 dependencies {
     implementation 'androidx.webkit:webkit:1.12.1'
     implementation 'com.google.android.gms:play-services-ads:25.5.0'
+    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
 }

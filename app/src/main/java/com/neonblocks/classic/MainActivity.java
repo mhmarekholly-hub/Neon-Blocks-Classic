@@ -62,7 +62,9 @@ public class MainActivity extends Activity {
         game.setOverScrollMode(View.OVER_SCROLL_NEVER);
         setContentView(game);
 
-        ads = new GameAds(this);
+        ads = new GameAds(this, (required, error) -> {
+            if (game != null) game.evaluateJavascript("window.neonPrivacy && window.neonPrivacy.state(" + required + "," + error + ")", null);
+        });
         if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             WebViewCompat.addWebMessageListener(game, "NeonAdsBridge",
                 Collections.singleton("https://appassets.androidplatform.net"),

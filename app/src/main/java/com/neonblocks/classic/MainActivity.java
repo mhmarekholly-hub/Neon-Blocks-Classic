@@ -7,13 +7,16 @@ import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
+import java.util.Collections;
 
 import androidx.webkit.WebViewAssetLoader;
 import androidx.webkit.WebViewClientCompat;
 
 public class MainActivity extends Activity {
     private WebView game;
+    private GameAds ads;
     private boolean activityPaused;
 
     @Override
@@ -59,6 +62,14 @@ public class MainActivity extends Activity {
         game.setOverScrollMode(View.OVER_SCROLL_NEVER);
         setContentView(game);
 
+        ads = new GameAds(this);
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
+            WebViewCompat.addWebMessageListener(game, "NeonAdsBridge",
+                Collections.singleton("https://appassets.androidplatform.net"),
+                (view, message, origin, mainFrame, reply) -> {
+                    if (mainFrame) ads.message(message.getData());
+                });
+        }
         game.loadUrl(
             "https://appassets.androidplatform.net/assets/index.html"
         );
@@ -85,13 +96,14 @@ public class MainActivity extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (!hasFocus && game != null) {
+        if (!hasFocus && game != null && (ads == null || !ads.isShowing())) {
             game.evaluateJavascript("window.neonGameMenu && window.neonGameMenu()", null);
         }
     }
 
     @Override
     protected void onDestroy() {
+        if (ads != null) ads.destroy();
         if (game != null) {
             game.destroy();
             game = null;

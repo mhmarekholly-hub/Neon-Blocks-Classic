@@ -1,51 +1,18 @@
-# Neon Blocks Classic – návrh zásad ochrany súkromia
+# Zásady súkromia – stav pred zverejnením
 
-Pracovný návrh k 11. 11. 2026. Nie je určený na zverejnenie: treba dokončiť kontaktné náležitosti, právne základy a lehoty uchovávania; výber veku a integrácia UMP sú pripravené na skúšku; overené vymazanie údajov zatiaľ nie je implementované.
+Majiteľ potvrdil meno Marek Hollý, Slovensko, kontakt studioneonblocks@gmail.com a uchovávanie výsledkov do vymazania hráčom. Značka v bežnej obrazovke hry je Neon Blocks Studio.
 
-## Kontakt
+Text pre testovaciu verziu 1.0.7 je pripravený v docs/privacy/index.html a identická kópia je zabalená v app/src/main/assets/privacy-policy.html. Pokrýva slovenčinu a angličtinu. Verejná webová adresa ešte nie je zverejnená. Opisuje pripravované používateľské vymazanie, preto sa má aktivovať až spolu s overenými pravidlami Firebase.
 
-Hra: Neon Blocks Classic (`com.neonblocks.classic`).
+Pred zverejnením:
 
-Kontakt pre otázky o súkromí: **studioneonblocks@gmail.com**.
+1. Overiť testy vlastníctva a mazania v lokálnych emulátoroch CI.
+2. Skontrolovať a zverejniť pravidlá, ktoré dovoľujú vymazať len vlastné skóre v scores a scores_v2. Publikovanie pravidiel samo záznamy nemaže.
+3. Overiť potvrdenie, úspech a chybu vymazania na vlastnom testovacom profile so súhlasom jeho vlastníka. Nemažeme cudzie ani reálne výsledky na skúšku.
+4. Zverejniť HTML na stabilnej verejnej URL bez prihlásenia. Nepoužívať odkaz na editor repozitára ani PDF. Doplniť URL do Google Play a AdMob.
+5. V AdMob Privacy & messaging vytvoriť správu pre príslušné regióny, priradiť správne App ID, vyplniť URL a overiť voľby v zariadení. Na tomto pracovnom počítači je apps.admob.com blokované sieťou; konfiguráciu musí dokončiť majiteľ v dostupnom prostredí.
+6. Pred produkčnými reklamami aktualizovať text podľa skutočnej prevádzky a vyplniť Families a Data safety. Produkčná reklamná jednotka zostáva nepoužitá.
 
-Prevádzkovateľ: **Marek Hollý, Slovensko**. Totožnosť a krajinu potvrdil majiteľ; ďalšie potrebné kontaktné náležitosti treba preveriť pred zverejnením.
+Žiadosť o vymazanie je lokálne potvrdená. Aplikácia počká na rozbehnuté odoslania, atomicky vymaže iba svoje dve serverové skóre a potom odstráni Firebase Auth identitu. Pri zlyhaní zostávajú obnovovacie údaje zachované; lokálna hra a vek/jazyk zostávajú. Súbežné vytváranie Auth identity je zjednotené do jedného požiadavkového procesu. Neúspešné vymazanie blokuje automatické obnovenie profilu až do opakovania pokusu.
 
-## Údaje uložené v zariadení
-
-Hra ukladá rozhraním WebView localStorage rozhraný herný stav, najlepšie skóre, jazyk a nastavenie zvuku. Pri použití rebríčka ukladá aj zvolenú prezývku, kód krajiny, voľbu účasti a prihlasovací obnovovací token. Herný stav zostáva v zariadení; rebríček používa internet.
-
-Vymazanie dát aplikácie alebo jej odinštalovanie odstráni miestne údaje. Samo osebe neodstráni záznamy rebríčka ani identitu vo Firebase a môže zrušiť možnosť preukázať vlastníctvo pôvodného záznamu.
-
-## Online rebríček
-
-Pri otvorení alebo obnovení rebríčka aktuálna verzia vytvára alebo obnovuje pseudonymnú identitu cez Firebase Authentication aj bez prihlásenia e-mailom. Technické identifikátory a sieťové údaje preto nemožno označovať za úplne anonymné.
-
-Ak sa hráč rozhodne zapojiť, po skončení hry sa do Cloud Firestore odošle jeho prezývka, zvolený dvojpísmenový kód krajiny a najlepšie skóre, priradené k identifikátoru Firebase. Krajina sa zadáva ručne; hra nezisťuje GPS polohu. Najlepších 20 výsledkov je verejne viditeľných. Hráč nemá používať skutočné meno ani kontaktné údaje.
-
-Služby Firebase prevádzkuje Google. Pri poskytovaní a zabezpečení služby môže spracúvať technické údaje vrátane IP adresy. Podrobnosti: https://firebase.google.com/support/privacy a https://policies.google.com/privacy.
-
-## Reklamy
-
-Aktuálne skúšobné APK obsahuje Google Mobile Ads SDK a používa výhradne Google demo reklamné identifikátory. Testovacie reklamy nie sú vyhlásením, že SDK nespracúva technické alebo sieťové údaje. Požiadavky používajú detské nastavenia, obmedzenie obsahu G a aplikácia odstraňuje oprávnenie AD_ID. Release kód explicitne neinicializuje reklamy ani neposiela reklamné požiadavky.
-
-Produkčné reklamy sú vypnuté. Pred ich zapnutím treba tento text aktualizovať podľa výsledného správania SDK, vekových obmedzení a regionálnych súhlasov. Hra má zobrazovať celoplošnú reklamu iba po skončení hry.
-
-## Deti
-
-Zamýšľané publikum zahŕňa deti od 6 rokov aj starších hráčov. Pripravovaná verzia ponúka výber vekovej skupiny bez predvoľby. Ukladá iba skupinu v zariadení, nie dátum narodenia. Hráčom do 18 rokov a pri neuvedenom veku neposiela reklamné ani rebríčkové požiadavky. Staršie serverové záznamy tým nevymaže. Pre dospelých je integrovaná správa súhlasov UMP; jej nastavenie v AdMob a overenie formulárov zostáva pred verejným vydaním dokončiť. Tieto zásady samy osebe nie sú rodičovským súhlasom.
-
-## Vymazanie, uchovávanie a práva
-
-Otázky a žiadosti možno zaslať na studioneonblocks@gmail.com. Zatiaľ nie je implementované používateľské vymazanie serverového záznamu ani overený postup overenia vlastníka pseudonymnej identity. Verejná prezývka sama osebe nestačí na overenie vlastníctva.
-
-Pred zverejnením musí prevádzkovateľ potvrdiť účely a právne základy spracúvania, príjemcov a prípadné prenosy údajov, konkrétne lehoty uchovávania vrátane záloh, postup vybavenia žiadostí a uplatniteľné práva vrátane podania sťažnosti dozornému orgánu. Nie je nastavené automatické časové mazanie skóre; odinštalovanie ho nevyvolá. Existujúce staré skóre nebolo zmazané.
-
-## Kontrola pred zverejnením
-
-- Dokončiť kontaktné náležitosti prevádzkovateľa a doplniť vyššie uvedené chýbajúce údaje.
-- Doplniť a otestovať vekovú obrazovku, detský režim rebríčka a reklamné súhlasy.
-- Zaviesť bezpečné vymazanie identity aj skóre a určiť retenčné lehoty.
-- Porovnať text s finálnym vydávaným APK a s formulárom Data safety.
-- Zverejniť finálny text na stabilnej verejnej webovej adrese a pridať odkaz do hry aj Google Play.
-
-Podklady pre dokončenie: https://support.google.com/googleplay/android-developer/answer/10144311 a https://support.google.com/admob/answer/6223431.
+Pravidlá sú prototyp určený na kontrolu pred širokým sprístupnením; testy nepokrývajú všetky možné formy zneužitia. Skóre zostáva údajom zasielaným klientom, nie serverom overeným výsledkom.

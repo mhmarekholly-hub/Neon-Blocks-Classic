@@ -8,3 +8,6 @@ keystore.properties
 .env.*
 !.env.example
 firebase-debug.log
+
+*-debug.log
+.firebase/

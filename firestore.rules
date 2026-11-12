@@ -1,5 +1,8 @@
 rules_version = '2';
-
+// Prototype: scores/{uid} and scores_v2/{uid} contain public nickname, country,
+// integer score only. UID is the immutable document path, never a writable field.
+// No email, tokens, age or private account fields belong in either collection.
+// Explicit profile deletion may remove only the authenticated owner's documents.
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -19,7 +22,7 @@ service cloud.firestore {
         && request.resource.data.score >= resource.data.score;
 
 
-      allow delete: if false;
+      allow delete: if isOwner(userId);
     }
 
 
@@ -34,7 +37,7 @@ service cloud.firestore {
       allow create: if isOwner(userId) && isValidV2Score(request.resource.data);
       allow update: if isOwner(userId) && isValidV2Score(request.resource.data)
         && request.resource.data.score >= resource.data.score;
-      allow delete: if false;
+      allow delete: if isOwner(userId);
     }
 
     function isAuthenticated() {

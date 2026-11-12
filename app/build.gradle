@@ -1,9 +1,57 @@
 plugins { id 'com.android.application' }
-android { namespace 'com.neonblocks.classic'; compileSdk 35
- defaultConfig { applicationId 'com.neonblocks.classic'; minSdk 24; targetSdk 35; versionCode 1; versionName '1.0.0' }
- buildTypes { release { minifyEnabled false } }
- compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+
+def uploadSigning = [
+    storeFile: System.getenv('NEON_UPLOAD_STORE_FILE'),
+    storePassword: System.getenv('NEON_UPLOAD_STORE_PASSWORD'),
+    keyAlias: System.getenv('NEON_UPLOAD_KEY_ALIAS'),
+    keyPassword: System.getenv('NEON_UPLOAD_KEY_PASSWORD')
+]
+def hasUploadSigning = uploadSigning.values().every { it != null && !it.trim().isEmpty() }
+def hasPartialSigning = uploadSigning.values().any { it != null && !it.trim().isEmpty() }
+if ((hasPartialSigning || System.getenv('NEON_REQUIRE_UPLOAD_SIGNING') == 'true') && !hasUploadSigning) {
+    throw new GradleException('Upload signing is incomplete. Set all four NEON_UPLOAD_* signing variables. Do not use a debug key for Google Play.')
+}
+
+android {
+    namespace 'com.neonblocks.classic'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.neonblocks.classic'
+        minSdk 24
+        targetSdk 36
+        versionCode 9
+        versionName '1.0.8'
+    }
+
+    buildFeatures { buildConfig true }
+    signingConfigs {
+        if (hasUploadSigning) {
+            upload {
+                storeFile rootProject.file(uploadSigning.storeFile)
+                storePassword uploadSigning.storePassword
+                keyAlias uploadSigning.keyAlias
+                keyPassword uploadSigning.keyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        debug { manifestPlaceholders = [admobAppId: 'ca-app-pub-5170449946501129~5808935188'] }
+        release {
+            manifestPlaceholders = [admobAppId: 'ca-app-pub-5170449946501129~5808935188']
+            minifyEnabled false
+            if (hasUploadSigning) signingConfig signingConfigs.upload
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 dependencies {
     implementation 'androidx.webkit:webkit:1.12.1'
+    implementation 'com.google.android.gms:play-services-ads:25.5.0'
+    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
 }
